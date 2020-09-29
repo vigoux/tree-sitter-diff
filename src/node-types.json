@@ -20,6 +20,10 @@
         {
           "type": "file",
           "named": true
+        },
+        {
+          "type": "header",
+          "named": true
         }
       ]
     }
@@ -42,6 +46,11 @@
         }
       ]
     }
+  },
+  {
+    "type": "header",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "hunk",
@@ -70,21 +79,6 @@
     },
     "children": {
       "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "line",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "line",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
       "required": true,
       "types": [
         {

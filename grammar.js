@@ -1,3 +1,4 @@
+const PREC_CHANGE = 10;
 module.exports = grammar({
   name: 'diff',
 
@@ -5,41 +6,37 @@ module.exports = grammar({
 
   rules: {
     // TODO(vigoux): there is some unused junk before the first header....
-
-    diff: $ => repeat1($.file),
+    diff: $ => repeat($.file),
 
     _newline: $ => '\n',
 
     file: $ => seq(
-      // TODO(vigoux): header
       swapable(file_header("+++", $), file_header("---", $)),
-      $._newline,
       repeat1($.hunk)),
 
     hunk: $ => seq(
-      // TODO(vigoux): hunk header
       "@@ -",
       field("deletion", $.range),
       " +",
       field("addition", $.range),
       " @@",
       $._newline,
-      repeat1($.line)
+      repeat1($._line)
     ),
 
     range: $ => choice($._number, seq($._number, ',', $._number)),
 
     _number: $ => /\d+/,
 
-    line: $ => seq(choice($.addition, $.deletion, alias($._text, $.context)), $._newline),
+    _line: $ => seq(choice($.addition, $.deletion, alias($._text, $.context)), $._newline),
 
     addition: $ => seq("+", $._text),
     deletion: $=> seq("-", $._text),
 
-    _text: $ => /[^\n]/,
+    _text: $ => /[^+-][^\n]*/,
 
     // TODO(vigoux): that's obviously wrong...
-    filename: $ => /\S/,
+    filename: $ => /\S+/,
   }
 });
 
@@ -49,5 +46,5 @@ function swapable(left, right) {
 
 function file_header(indicator, $) {
   // TODO(vigoux): parse timestamp too
-  return seq(indicator, ' ', $.filename, '\t', /.*\n/);
+  return seq(indicator, ' ', $.filename, optional(seq('\t', $._text)), $._newline);
 }

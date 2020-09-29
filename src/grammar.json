@@ -2,11 +2,34 @@
   "name": "diff",
   "rules": {
     "diff": {
-      "type": "REPEAT1",
-      "content": {
-        "type": "SYMBOL",
-        "name": "file"
-      }
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "ALIAS",
+          "content": {
+            "type": "REPEAT",
+            "content": {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "PATTERN",
+                  "value": ".*"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "_newline"
+                }
+              ]
+            }
+          },
+          "named": true,
+          "value": "header"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "file"
+        }
+      ]
     },
     "_newline": {
       "type": "STRING",
@@ -37,12 +60,29 @@
                       "name": "filename"
                     },
                     {
-                      "type": "STRING",
-                      "value": "\t"
+                      "type": "CHOICE",
+                      "members": [
+                        {
+                          "type": "SEQ",
+                          "members": [
+                            {
+                              "type": "STRING",
+                              "value": "\t"
+                            },
+                            {
+                              "type": "SYMBOL",
+                              "name": "_text"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "BLANK"
+                        }
+                      ]
                     },
                     {
-                      "type": "PATTERN",
-                      "value": ".*\\n"
+                      "type": "SYMBOL",
+                      "name": "_newline"
                     }
                   ]
                 },
@@ -62,12 +102,29 @@
                       "name": "filename"
                     },
                     {
-                      "type": "STRING",
-                      "value": "\t"
+                      "type": "CHOICE",
+                      "members": [
+                        {
+                          "type": "SEQ",
+                          "members": [
+                            {
+                              "type": "STRING",
+                              "value": "\t"
+                            },
+                            {
+                              "type": "SYMBOL",
+                              "name": "_text"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "BLANK"
+                        }
+                      ]
                     },
                     {
-                      "type": "PATTERN",
-                      "value": ".*\\n"
+                      "type": "SYMBOL",
+                      "name": "_newline"
                     }
                   ]
                 }
@@ -92,12 +149,29 @@
                       "name": "filename"
                     },
                     {
-                      "type": "STRING",
-                      "value": "\t"
+                      "type": "CHOICE",
+                      "members": [
+                        {
+                          "type": "SEQ",
+                          "members": [
+                            {
+                              "type": "STRING",
+                              "value": "\t"
+                            },
+                            {
+                              "type": "SYMBOL",
+                              "name": "_text"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "BLANK"
+                        }
+                      ]
                     },
                     {
-                      "type": "PATTERN",
-                      "value": ".*\\n"
+                      "type": "SYMBOL",
+                      "name": "_newline"
                     }
                   ]
                 },
@@ -117,22 +191,35 @@
                       "name": "filename"
                     },
                     {
-                      "type": "STRING",
-                      "value": "\t"
+                      "type": "CHOICE",
+                      "members": [
+                        {
+                          "type": "SEQ",
+                          "members": [
+                            {
+                              "type": "STRING",
+                              "value": "\t"
+                            },
+                            {
+                              "type": "SYMBOL",
+                              "name": "_text"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "BLANK"
+                        }
+                      ]
                     },
                     {
-                      "type": "PATTERN",
-                      "value": ".*\\n"
+                      "type": "SYMBOL",
+                      "name": "_newline"
                     }
                   ]
                 }
               ]
             }
           ]
-        },
-        {
-          "type": "SYMBOL",
-          "name": "_newline"
         },
         {
           "type": "REPEAT1",
@@ -182,7 +269,7 @@
           "type": "REPEAT1",
           "content": {
             "type": "SYMBOL",
-            "name": "line"
+            "name": "_line"
           }
         }
       ]
@@ -217,7 +304,7 @@
       "type": "PATTERN",
       "value": "\\d+"
     },
-    "line": {
+    "_line": {
       "type": "SEQ",
       "members": [
         {
@@ -276,11 +363,11 @@
     },
     "_text": {
       "type": "PATTERN",
-      "value": "[^\\n]"
+      "value": "[^+-][^\\n]*"
     },
     "filename": {
       "type": "PATTERN",
-      "value": "\\S"
+      "value": "\\S+"
     }
   },
   "extras": [
