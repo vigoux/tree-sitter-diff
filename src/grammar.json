@@ -1,0 +1,297 @@
+{
+  "name": "diff",
+  "rules": {
+    "diff": {
+      "type": "REPEAT1",
+      "content": {
+        "type": "SYMBOL",
+        "name": "file"
+      }
+    },
+    "_newline": {
+      "type": "STRING",
+      "value": "\n"
+    },
+    "file": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "SEQ",
+                  "members": [
+                    {
+                      "type": "STRING",
+                      "value": "+++"
+                    },
+                    {
+                      "type": "STRING",
+                      "value": " "
+                    },
+                    {
+                      "type": "SYMBOL",
+                      "name": "filename"
+                    },
+                    {
+                      "type": "STRING",
+                      "value": "\t"
+                    },
+                    {
+                      "type": "PATTERN",
+                      "value": ".*\\n"
+                    }
+                  ]
+                },
+                {
+                  "type": "SEQ",
+                  "members": [
+                    {
+                      "type": "STRING",
+                      "value": "---"
+                    },
+                    {
+                      "type": "STRING",
+                      "value": " "
+                    },
+                    {
+                      "type": "SYMBOL",
+                      "name": "filename"
+                    },
+                    {
+                      "type": "STRING",
+                      "value": "\t"
+                    },
+                    {
+                      "type": "PATTERN",
+                      "value": ".*\\n"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "SEQ",
+                  "members": [
+                    {
+                      "type": "STRING",
+                      "value": "---"
+                    },
+                    {
+                      "type": "STRING",
+                      "value": " "
+                    },
+                    {
+                      "type": "SYMBOL",
+                      "name": "filename"
+                    },
+                    {
+                      "type": "STRING",
+                      "value": "\t"
+                    },
+                    {
+                      "type": "PATTERN",
+                      "value": ".*\\n"
+                    }
+                  ]
+                },
+                {
+                  "type": "SEQ",
+                  "members": [
+                    {
+                      "type": "STRING",
+                      "value": "+++"
+                    },
+                    {
+                      "type": "STRING",
+                      "value": " "
+                    },
+                    {
+                      "type": "SYMBOL",
+                      "name": "filename"
+                    },
+                    {
+                      "type": "STRING",
+                      "value": "\t"
+                    },
+                    {
+                      "type": "PATTERN",
+                      "value": ".*\\n"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_newline"
+        },
+        {
+          "type": "REPEAT1",
+          "content": {
+            "type": "SYMBOL",
+            "name": "hunk"
+          }
+        }
+      ]
+    },
+    "hunk": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "@@ -"
+        },
+        {
+          "type": "FIELD",
+          "name": "deletion",
+          "content": {
+            "type": "SYMBOL",
+            "name": "range"
+          }
+        },
+        {
+          "type": "STRING",
+          "value": " +"
+        },
+        {
+          "type": "FIELD",
+          "name": "addition",
+          "content": {
+            "type": "SYMBOL",
+            "name": "range"
+          }
+        },
+        {
+          "type": "STRING",
+          "value": " @@"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_newline"
+        },
+        {
+          "type": "REPEAT1",
+          "content": {
+            "type": "SYMBOL",
+            "name": "line"
+          }
+        }
+      ]
+    },
+    "range": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "_number"
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "_number"
+            },
+            {
+              "type": "STRING",
+              "value": ","
+            },
+            {
+              "type": "SYMBOL",
+              "name": "_number"
+            }
+          ]
+        }
+      ]
+    },
+    "_number": {
+      "type": "PATTERN",
+      "value": "\\d+"
+    },
+    "line": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "addition"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "deletion"
+            },
+            {
+              "type": "ALIAS",
+              "content": {
+                "type": "SYMBOL",
+                "name": "_text"
+              },
+              "named": true,
+              "value": "context"
+            }
+          ]
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_newline"
+        }
+      ]
+    },
+    "addition": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "+"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_text"
+        }
+      ]
+    },
+    "deletion": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "-"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_text"
+        }
+      ]
+    },
+    "_text": {
+      "type": "PATTERN",
+      "value": "[^\\n]"
+    },
+    "filename": {
+      "type": "PATTERN",
+      "value": "\\S"
+    }
+  },
+  "extras": [
+    {
+      "type": "PATTERN",
+      "value": "[\\t ]+"
+    }
+  ],
+  "conflicts": [],
+  "externals": [],
+  "inline": [],
+  "supertypes": []
+}
+
